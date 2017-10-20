@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Lcbo App</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="create_account">Create Account</string>
+    <string name="message_already_have_an_account">Already have an account?</string>
+    <string name="error_invalid_email">This email is not valid</string>
+    <string name="error_password_dont_match">Passwords don\'t match</string>
+    <string name="registration">Registration</string>
+</resources>
