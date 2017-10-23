@@ -15,22 +15,51 @@
  */
 package com.obezhenar.yukontestapp.view.ui.activity
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.arellomobile.mvp.presenter.InjectPresenter
 import com.obezhenar.yukontestapp.R
+import com.obezhenar.yukontestapp.common.extensions.startActivity
+import com.obezhenar.yukontestapp.presenter.LogOutPresenter
+import com.obezhenar.yukontestapp.view.LogOutView
 import com.obezhenar.yukontestapp.view.ui.fragment.StoresFragment
 
 /**
  * Created by 1 on 10/19/2017.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvpAppCompatActivity(), LogOutView {
+    @InjectPresenter
+    lateinit var logOutPresenter: LogOutPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         supportFragmentManager.beginTransaction()
-                .add(R.id.vContent, StoresFragment())
+                .replace(R.id.vContent, StoresFragment())
                 .commit()
+    }
+
+    override fun onLogOutDone() {
+        startActivity(AuthenticationActivity::class)
+        finish()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_log_out, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_sign_out) {
+            logOutPresenter.logOut()
+            ProgressDialog.show(this, null, "Log out")
+        }
+        return true
     }
 }

@@ -30,6 +30,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".view.ui.activity.StoreDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".view.ui.activity.MainActivity">
 
         </activity>

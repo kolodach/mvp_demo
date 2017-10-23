@@ -15,25 +15,49 @@
  */
 package com.obezhenar.yukontestapp.model.repository
 
+import com.obezhenar.yukontestapp.C
+import com.obezhenar.yukontestapp.common.AppSchedulers
+import com.obezhenar.yukontestapp.common.extensions.observable
+import com.obezhenar.yukontestapp.model.api.ProductApi
+import com.obezhenar.yukontestapp.model.api.StoreApi
+import com.obezhenar.yukontestapp.model.dao.InventoryDao
+import com.obezhenar.yukontestapp.model.dao.ProductDao
+import com.obezhenar.yukontestapp.model.dao.StoreDao
+import com.obezhenar.yukontestapp.model.entity.Inventory
 import com.obezhenar.yukontestapp.model.entity.Product
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by 1 on 10/19/2017.
  */
-class ProductRepositoryImpl : ProductRepository {
+class ProductRepositoryImpl(
+        private val productDao: ProductDao,
+        private val productApi: ProductApi,
+        private val inventoryDao: InventoryDao
+) : ProductRepository {
 
-    override fun getProductsByPage(page: Int): Flowable<List<Product>> {
-        return Flowable.never();
-    }
+    override fun getProductsInstore(storeId: Long, page: Int) = productDao.getProductsInStore(storeId, page)
+            .flatMap {
+                if (it.isEmpty())
+                    productApi.getProductsInStore(storeId, page, C.RECORDS_PER_PAGE)
+                            .subscribeOn(Schedulers.io())
+                            .flatMap { products ->
+                                productDao.insertAll(products.result)
+                                        .subscribeOn(AppSchedulers.database)
+                                        .andThen(inventoryDao.insertAll(products.result.map {
+                                            Inventory(
+                                                    0, it.id, storeId, false, 0, ", ", "", 0L, 0)
+                                        }))
+                                        .andThen(observable { products.result })
+                            }
+                else observable { it }
+            }
 
-    override fun getProductById(): Single<Product> {
-        return Single.never()
-    }
+    override fun getProductById(id: Long) = productDao.getProductById(id).singleOrError()
 
-    override fun syncProducts(): Completable {
-        return Completable.complete()
-    }
+    override fun removeAll() = productDao.removeAll()
 }

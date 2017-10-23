@@ -27,7 +27,7 @@ import com.obezhenar.yukontestapp.model.entity.Store
  *
  */
 class StoreContract {
-    companion object : BaseContract(){
+    companion object : BaseContract() {
         val TABLE_NAME = "store"
 
         val IS_DEAD = "is_dead"
@@ -120,7 +120,7 @@ class StoreContract {
 
         }
 
-        fun obtainContentValues(store : Store): ContentValues {
+        fun obtainContentValues(store: Store): ContentValues {
             val cv = ContentValues()
             cv.put(IS_DEAD, store.isDead)
             cv.put(NAME, store.name)
@@ -170,8 +170,8 @@ class StoreContract {
             if (cursor.moveToFirst())
                 do {
                     stores.add(Store(
-                            cursor.getInt(cursor.getColumnIndex(ID)),
-                            cursor.getString(cursor.getColumnIndex(IS_DEAD)).toBoolean(),
+                            cursor.getLong(cursor.getColumnIndex(ID)),
+                            cursor.getString(cursor.getColumnIndex(IS_DEAD)) == "1",
                             cursor.getString(cursor.getColumnIndex(NAME)),
                             cursor.getString(cursor.getColumnIndex(TAGS)),
                             cursor.getString(cursor.getColumnIndex(ADDRESS_LINE_1)),
@@ -186,15 +186,15 @@ class StoreContract {
                             cursor.getString(cursor.getColumnIndex(INVENTORY_COUNT)).toInt(),
                             cursor.getString(cursor.getColumnIndex(INVENTORY_PRICE_IN_CENTS)).toInt(),
                             cursor.getString(cursor.getColumnIndex(INVENTORY_VOLUME_IN_MILLILITERS)).toInt(),
-                            cursor.getString(cursor.getColumnIndex(HAS_WHEELCHAIR_ACCESSABILITY)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_BILINGUAL_SERVICES)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_PRODUCT_CONSULTANT)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_TASTING_BAR)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_BEER_COLD_ROOM)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_SPECIAL_OCCASION_PERMITS)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_VINTAGES_CORNER)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_PARKING)).toBoolean(),
-                            cursor.getString(cursor.getColumnIndex(HAS_TRANSIT_ACCESS)).toBoolean(),
+                            cursor.getString(cursor.getColumnIndex(HAS_WHEELCHAIR_ACCESSABILITY)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_BILINGUAL_SERVICES)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_PRODUCT_CONSULTANT)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_TASTING_BAR)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_BEER_COLD_ROOM)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_SPECIAL_OCCASION_PERMITS)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_VINTAGES_CORNER)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_PARKING)) == "1",
+                            cursor.getString(cursor.getColumnIndex(HAS_TRANSIT_ACCESS)) == "1",
                             cursor.getString(cursor.getColumnIndex(SUNDAY_OPEN)).toInt(),
                             cursor.getString(cursor.getColumnIndex(SUNDAY_CLOSE)).toInt(),
                             cursor.getString(cursor.getColumnIndex(MONDAY_OPEN)).toInt(),

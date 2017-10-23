@@ -30,7 +30,11 @@ class UserRepositoryImpl(
         private val userApi: UserApi
 ) : UserRepository {
 
-    override fun removeUser(user: User) = userDao.removeUser(user)
+    override fun removeUser() =
+            getUser().flatMapCompletable {
+                userDao.removeUser(it)
+                        .subscribeOn(Schedulers.io())
+            }
 
     override fun getUser(): Observable<User?> = userDao.getUser()
 

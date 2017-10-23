@@ -20,31 +20,60 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.obezhenar.yukontestapp.R
+import com.obezhenar.yukontestapp.common.extensions.doOnClick
+import com.obezhenar.yukontestapp.common.extensions.setVisible
 import com.obezhenar.yukontestapp.model.entity.Store
-import kotlinx.android.synthetic.main.item_view.view.*
+import com.obezhenar.yukontestapp.view.ui.adapter.view_holder.ProgressViewHolder
+import kotlinx.android.synthetic.main.item_store.view.*
+import kotlin.properties.Delegates
 
 /**
  * Created by 1 on 10/20/2017.
  */
-class StoresAdapter : RecyclerView.Adapter<StoresAdapter.StoreViewHolder>() {
+class StoresAdapter(private val onItemClickListener: (Store) -> Unit)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val stores = ArrayList<Store>()
+    private val VIEW_TYPE_ITEM = 1
+    private val VIEW_TYPE_PROGRESS = 2
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): StoreViewHolder =
-            StoreViewHolder(LayoutInflater.from(parent!!.context)
-                    .inflate(R.layout.item_view, parent, false))
+    var isLoading = false
 
-    override fun onBindViewHolder(holder: StoreViewHolder?, position: Int) {
-        val store = stores[position]
-        with(holder!!.itemView) {
-            tvTitle.text = store.name
-            tvAddress.text = store.addressLine1
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount - 1)
+            VIEW_TYPE_PROGRESS
+        else
+            VIEW_TYPE_ITEM
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflate = LayoutInflater.from(parent.context)
+        return if (viewType == VIEW_TYPE_PROGRESS)
+            ProgressViewHolder(inflate.inflate(R.layout.item_progress, parent, false))
+        else StoreViewHolder(inflate.inflate(R.layout.item_store, parent, false))
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+        if (getItemViewType(position) == VIEW_TYPE_ITEM) {
+            val store = stores[position]
+            with(holder!!.itemView) {
+                tvTitle.text = store.name
+                tvAddress.text = store.addressLine1
+                doOnClick { onItemClickListener.invoke(store) }
+            }
+        } else {
+            holder!!.itemView.setVisible(isLoading)
         }
     }
 
-    override fun getItemCount(): Int = stores.size
+    override fun getItemCount(): Int = stores.size + 1
 
     fun addStores(storesToAdd: List<Store>) {
         stores.addAll(storesToAdd)
+        notifyDataSetChanged()
+    }
+
+    fun clean() {
+        stores.clear()
         notifyDataSetChanged()
     }
 

@@ -34,6 +34,8 @@ fun View.setVisible(boolean: Boolean) {
         visibility = View.GONE
 }
 
+fun View.visible() : Boolean = visibility == View.VISIBLE
+
 fun TextView.doOnTextChanged(body: (String) -> Unit) {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {

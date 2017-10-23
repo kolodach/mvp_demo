@@ -17,44 +17,79 @@ package com.obezhenar.yukontestapp.view.ui.fragment
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.support.v7.widget.RecyclerView
+import android.view.*
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.obezhenar.yukontestapp.R
 import com.obezhenar.yukontestapp.model.entity.Store
 import com.obezhenar.yukontestapp.presenter.StoresPresenter
 import com.obezhenar.yukontestapp.view.StoresView
+import com.obezhenar.yukontestapp.view.ui.activity.StoreDetailsActivity
 import com.obezhenar.yukontestapp.view.ui.adapter.StoresAdapter
 import kotlinx.android.synthetic.main.fragment_stores.*
 
 /**
- * Created by 1 on 10/20/2017.
+ * Implements Stores View behaviour
  */
 class StoresFragment : MvpAppCompatFragment(), StoresView {
     @InjectPresenter
-    lateinit var storesPresenter : StoresPresenter
+    lateinit var storesPresenter: StoresPresenter
 
-    private val adapter = StoresAdapter()
+    private var loading = false
+
+    private val adapter = StoresAdapter({
+        startActivity(StoreDetailsActivity
+                .getStartIntent(context, it.id))
+    })
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater!!.inflate(R.layout.fragment_stores, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvStores.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        rvStores.layoutManager = layoutManager
         rvStores.adapter = adapter
 
-        storesPresenter.loadMoreStore()
+        rvStores.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                if (layoutManager.findLastVisibleItemPosition() >= adapter.itemCount - 10
+                        && !loading)
+                    storesPresenter.loadMoreStores()
+            }
+        })
+        swipeRefresh.setOnRefreshListener {
+            storesPresenter.refreshStores()
+            adapter.clean()
+        }
+
+        storesPresenter.loadMoreStores()
+    }
+
+    override fun onStoresCleared() {
+        swipeRefresh.isRefreshing = false
+        displayProgress(true)
+        adapter.notifyItemChanged(adapter.itemCount - 1)
+    }
+
+    override fun onAllItemsLoaded() {
+        loading = true
+        adapter.isLoading = false
+        adapter.notifyItemChanged(adapter.itemCount - 1)
     }
 
     override fun displayProgress(display: Boolean) {
-
+        loading = display
+        adapter.isLoading = display
     }
 
     override fun addStores(stores: List<Store>) {
-        addStores(stores)
+        adapter.addStores(stores)
     }
 }

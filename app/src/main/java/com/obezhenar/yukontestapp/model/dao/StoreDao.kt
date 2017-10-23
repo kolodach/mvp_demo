@@ -30,4 +30,6 @@ interface StoreDao {
     fun getStoreById(id: Long): Single<Store>
 
     fun insertAll(stores : List<Store>) : Completable
+
+    fun removeAll() : Completable
 }

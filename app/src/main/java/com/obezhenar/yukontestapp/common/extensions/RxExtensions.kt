@@ -17,6 +17,7 @@ package com.obezhenar.yukontestapp.common.extensions
 
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import retrofit2.http.Body
 
 /**
  * Created by 1 on 10/20/2017.
@@ -28,3 +29,7 @@ fun <T> Single<T>.observeOnMainThread() = observeOn(AndroidSchedulers.mainThread
 fun <T> Maybe<T>.observeOnMainThread() = observeOn(AndroidSchedulers.mainThread())
 
 fun Completable.observeOnMainThread() = observeOn(AndroidSchedulers.mainThread())
+
+fun <T> observable(body: () -> T): Observable<T> = Observable.fromCallable<T>({ body.invoke() })
+
+fun completable(body: () -> Unit): Completable = Completable.fromAction({ body.invoke() })

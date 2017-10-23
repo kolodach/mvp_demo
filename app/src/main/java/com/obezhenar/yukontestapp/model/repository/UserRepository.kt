@@ -25,7 +25,7 @@ import io.reactivex.Observable
 interface UserRepository {
     fun refreshToken() : Completable
 
-    fun removeUser(user: User) : Completable
+    fun removeUser() : Completable
 
     fun getUser(): Observable<User?>
 

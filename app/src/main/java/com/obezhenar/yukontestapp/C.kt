@@ -16,10 +16,10 @@
 package com.obezhenar.yukontestapp
 
 /**
- * Created by 1 on 10/19/2017.
+ * Put you global constants here
  */
 class C {
     companion object {
-        val RECORDS_PER_PAGE = 20
+        val RECORDS_PER_PAGE = 50
     }
 }

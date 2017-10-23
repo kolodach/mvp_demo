@@ -135,122 +135,123 @@ class ProductContract {
         fun upgradeTable(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
         }
-
-        fun Product.obtainContentValues(): ContentValues {
-            val cv = ContentValues()
-            cv.put(ID, id)
-            cv.put(IS_DEAD, isDead)
-            cv.put(NAME, name)
-            cv.put(TAGS, tags)
-            cv.put(IS_DISCONTINUED, isDiscontinued)
-            cv.put(PRICE_IN_CENTS, priceInCents)
-            cv.put(REGULAR_PRICE_IN_CENTS, regularPriceInCents)
-            cv.put(LIMITED_TIME_OFFER_SAVINGS_IN_CENTS, limitedTimeOfferSavingsInCents)
-            cv.put(LIMITED_TIME_OFFER_ENDS_ON, limitedTimeOfferEndsOn)
-            cv.put(BONUS_REWARD_MILES, bonusRewardMiles)
-            cv.put(BONUS_REWARD_MILES_ENDS_ON, bonusRewardMilesEndsOn)
-            cv.put(STOCK_TYPE, stockType)
-            cv.put(PRIMARY_CATEGORY, primaryCategory)
-            cv.put(SECONDARY_CATEGORY, secondaryCategory)
-            cv.put(ORIGIN, origin)
-            cv.put(PACKAGE, pac)
-            cv.put(PACKAGE_UNIT_TYPE, packageUnitType)
-            cv.put(PACKAGE_UNIT_VOLUME_IN_MILLILITERS, packageUnitVolumeInMilliliters)
-            cv.put(TOTAL_PACKAGE_UNITS, totalPackageUnits)
-            cv.put(VOLUME_IN_MILLILITERS, volumeInMilliliters)
-            cv.put(ALCOHOL_CONTENT, alcoholContent)
-            cv.put(PRICE_PER_LITER_OF_ALCOHOL_IN_CENTS, pricePerLiterOfAlcoholInCents)
-            cv.put(PRICE_PER_LITER_IN_CENTS, pricePerLiterInCents)
-            cv.put(INVENTORY_COUNT, inventoryCount)
-            cv.put(INVENTORY_VOLUME_IN_MILLILITERS, inventoryVolumeInMilliliters)
-            cv.put(INVENTORY_PRICE_IN_CENTS, inventoryPriceInCents)
-            cv.put(SUGAR_CONTENT, sugarContent)
-            cv.put(PRODUCER_NAME, producerName)
-            cv.put(RELEASED_ON, releasedOn)
-            cv.put(HAS_VALUE_ADDED_PROMOTION, hasValueAddedPromotion)
-            cv.put(HAS_LIMITED_TIME_OFFER, hasLimitedTimeOffer)
-            cv.put(HAS_BONUS_REWARD_MILES, hasBonusRewardMiles)
-            cv.put(IS_SEASONAL, isSeasonal)
-            cv.put(IS_VQA, isVqa)
-            cv.put(IS_OCB, isOcb)
-            cv.put(IS_KOSHER, isKosher)
-            cv.put(VALUE_ADDED_PROMOTION_DESCRIPTION, valueAddedPromotionDescription)
-            cv.put(DESCRIPTION, description)
-            cv.put(SERVING_SUGGESTION, servingSuggestion)
-            cv.put(TASTING_NOTE, tastingNote)
-            cv.put(UPDATED_AT, updatedAt)
-            cv.put(IMAGE_THUMB_URL, imageThumbUrl)
-            cv.put(IMAGE_URL, imageUrl)
-            cv.put(VARIETAL, varietal)
-            cv.put(STYLE, style)
-            cv.put(TERTIARY_CATEGORY, tertiaryCategory)
-            cv.put(SUGAR_IN_GRAMS_PER_LITER, sugarInGramsPerLiter)
-            cv.put(CLEARANCE_SALE_SAVINGS_IN_CENTS, clearanceSaleSavingsInCents)
-            cv.put(HAS_CLEARANCE_SALE, hasClearanceSale)
-            cv.put(PRODUCT_NO, productNo)
-            return cv
-        }
     }
+}
 
-    fun Cursor.obtainProducts(): List<Product> {
-        val products = ArrayList<Product>()
-        if (moveToFirst())
-            do {
-                products.add(Product(
-                        getLong(getColumnIndex(ID)),
-                        getString(getColumnIndex(IS_DEAD)).toBoolean(),
-                        getString(getColumnIndex(NAME)),
-                        getString(getColumnIndex(TAGS)),
-                        getString(getColumnIndex(IS_DISCONTINUED)).toBoolean(),
-                        getString(getColumnIndex(PRICE_IN_CENTS)).toInt(),
-                        getString(getColumnIndex(REGULAR_PRICE_IN_CENTS)).toInt(),
-                        getString(getColumnIndex(LIMITED_TIME_OFFER_SAVINGS_IN_CENTS)).toInt(),
-                        getString(getColumnIndex(LIMITED_TIME_OFFER_ENDS_ON)),
-                        getString(getColumnIndex(BONUS_REWARD_MILES)).toInt(),
-                        getString(getColumnIndex(BONUS_REWARD_MILES_ENDS_ON)),
-                        getString(getColumnIndex(STOCK_TYPE)),
-                        getString(getColumnIndex(PRIMARY_CATEGORY)),
-                        getString(getColumnIndex(SECONDARY_CATEGORY)),
-                        getString(getColumnIndex(ORIGIN)),
-                        getString(getColumnIndex(PACKAGE)),
-                        getString(getColumnIndex(PACKAGE_UNIT_TYPE)),
-                        getString(getColumnIndex(PACKAGE_UNIT_VOLUME_IN_MILLILITERS)).toInt(),
-                        getString(getColumnIndex(TOTAL_PACKAGE_UNITS)).toInt(),
-                        getString(getColumnIndex(VOLUME_IN_MILLILITERS)).toInt(),
-                        getString(getColumnIndex(ALCOHOL_CONTENT)).toInt(),
-                        getString(getColumnIndex(PRICE_PER_LITER_OF_ALCOHOL_IN_CENTS)).toInt(),
-                        getString(getColumnIndex(PRICE_PER_LITER_IN_CENTS)).toInt(),
-                        getString(getColumnIndex(INVENTORY_COUNT)).toInt(),
-                        getString(getColumnIndex(INVENTORY_VOLUME_IN_MILLILITERS)).toInt(),
-                        getString(getColumnIndex(INVENTORY_PRICE_IN_CENTS)).toInt(),
-                        getString(getColumnIndex(SUGAR_CONTENT)),
-                        getString(getColumnIndex(PRODUCER_NAME)),
-                        getString(getColumnIndex(RELEASED_ON)),
-                        getString(getColumnIndex(HAS_VALUE_ADDED_PROMOTION)).toBoolean(),
-                        getString(getColumnIndex(HAS_LIMITED_TIME_OFFER)).toBoolean(),
-                        getString(getColumnIndex(HAS_BONUS_REWARD_MILES)).toBoolean(),
-                        getString(getColumnIndex(IS_SEASONAL)).toBoolean(),
-                        getString(getColumnIndex(IS_VQA)).toBoolean(),
-                        getString(getColumnIndex(IS_OCB)).toBoolean(),
-                        getString(getColumnIndex(IS_KOSHER)).toBoolean(),
-                        getString(getColumnIndex(VALUE_ADDED_PROMOTION_DESCRIPTION)),
-                        getString(getColumnIndex(DESCRIPTION)),
-                        getString(getColumnIndex(SERVING_SUGGESTION)),
-                        getString(getColumnIndex(TASTING_NOTE)),
-                        getString(getColumnIndex(UPDATED_AT)),
-                        getString(getColumnIndex(IMAGE_THUMB_URL)),
-                        getString(getColumnIndex(IMAGE_URL)),
-                        getString(getColumnIndex(VARIETAL)),
-                        getString(getColumnIndex(STYLE)),
-                        getString(getColumnIndex(TERTIARY_CATEGORY)),
-                        getString(getColumnIndex(SUGAR_IN_GRAMS_PER_LITER)).toInt(),
-                        getString(getColumnIndex(CLEARANCE_SALE_SAVINGS_IN_CENTS)).toInt(),
-                        getString(getColumnIndex(HAS_CLEARANCE_SALE)).toBoolean(),
-                        getString(getColumnIndex(PRODUCT_NO)).toLong()
+fun Product.obtainContentValues(): ContentValues {
+    val cv = ContentValues()
+    cv.put(ProductContract.ID, id)
+    cv.put(ProductContract.IS_DEAD, isDead)
+    cv.put(ProductContract.NAME, name)
+    cv.put(ProductContract.TAGS, tags)
+    cv.put(ProductContract.IS_DISCONTINUED, isDiscontinued)
+    cv.put(ProductContract.PRICE_IN_CENTS, priceInCents)
+    cv.put(ProductContract.REGULAR_PRICE_IN_CENTS, regularPriceInCents)
+    cv.put(ProductContract.LIMITED_TIME_OFFER_SAVINGS_IN_CENTS, limitedTimeOfferSavingsInCents)
+    cv.put(ProductContract.LIMITED_TIME_OFFER_ENDS_ON, limitedTimeOfferEndsOn)
+    cv.put(ProductContract.BONUS_REWARD_MILES, bonusRewardMiles)
+    cv.put(ProductContract.BONUS_REWARD_MILES_ENDS_ON, bonusRewardMilesEndsOn)
+    cv.put(ProductContract.STOCK_TYPE, stockType)
+    cv.put(ProductContract.PRIMARY_CATEGORY, primaryCategory)
+    cv.put(ProductContract.SECONDARY_CATEGORY, secondaryCategory)
+    cv.put(ProductContract.ORIGIN, origin)
+    cv.put(ProductContract.PACKAGE, pac)
+    cv.put(ProductContract.PACKAGE_UNIT_TYPE, packageUnitType)
+    cv.put(ProductContract.PACKAGE_UNIT_VOLUME_IN_MILLILITERS, packageUnitVolumeInMilliliters)
+    cv.put(ProductContract.TOTAL_PACKAGE_UNITS, totalPackageUnits)
+    cv.put(ProductContract.VOLUME_IN_MILLILITERS, volumeInMilliliters)
+    cv.put(ProductContract.ALCOHOL_CONTENT, alcoholContent)
+    cv.put(ProductContract.PRICE_PER_LITER_OF_ALCOHOL_IN_CENTS, pricePerLiterOfAlcoholInCents)
+    cv.put(ProductContract.PRICE_PER_LITER_IN_CENTS, pricePerLiterInCents)
+    cv.put(ProductContract.INVENTORY_COUNT, inventoryCount)
+    cv.put(ProductContract.INVENTORY_VOLUME_IN_MILLILITERS, inventoryVolumeInMilliliters)
+    cv.put(ProductContract.INVENTORY_PRICE_IN_CENTS, inventoryPriceInCents)
+    cv.put(ProductContract.SUGAR_CONTENT, sugarContent)
+    cv.put(ProductContract.PRODUCER_NAME, producerName)
+    cv.put(ProductContract.RELEASED_ON, releasedOn)
+    cv.put(ProductContract.HAS_VALUE_ADDED_PROMOTION, hasValueAddedPromotion)
+    cv.put(ProductContract.HAS_LIMITED_TIME_OFFER, hasLimitedTimeOffer)
+    cv.put(ProductContract.HAS_BONUS_REWARD_MILES, hasBonusRewardMiles)
+    cv.put(ProductContract.IS_SEASONAL, isSeasonal)
+    cv.put(ProductContract.IS_VQA, isVqa)
+    cv.put(ProductContract.IS_OCB, isOcb)
+    cv.put(ProductContract.IS_KOSHER, isKosher)
+    cv.put(ProductContract.VALUE_ADDED_PROMOTION_DESCRIPTION, valueAddedPromotionDescription)
+    cv.put(ProductContract.DESCRIPTION, description)
+    cv.put(ProductContract.SERVING_SUGGESTION, servingSuggestion)
+    cv.put(ProductContract.TASTING_NOTE, tastingNote)
+    cv.put(ProductContract.UPDATED_AT, updatedAt)
+    cv.put(ProductContract.IMAGE_THUMB_URL, imageThumbUrl)
+    cv.put(ProductContract.IMAGE_URL, imageUrl)
+    cv.put(ProductContract.VARIETAL, varietal)
+    cv.put(ProductContract.STYLE, style)
+    cv.put(ProductContract.TERTIARY_CATEGORY, tertiaryCategory)
+    cv.put(ProductContract.SUGAR_IN_GRAMS_PER_LITER, sugarInGramsPerLiter)
+    cv.put(ProductContract.CLEARANCE_SALE_SAVINGS_IN_CENTS, clearanceSaleSavingsInCents)
+    cv.put(ProductContract.HAS_CLEARANCE_SALE, hasClearanceSale)
+    cv.put(ProductContract.PRODUCT_NO, productNo)
+    return cv
+}
 
-                ))
-            } while (moveToFirst())
-        close()
-        return products
-    }
+
+fun Cursor.obtainProducts(): List<Product> {
+    val products = ArrayList<Product>()
+    if (moveToFirst())
+        do {
+            products.add(Product(
+                    getLong(getColumnIndex(ProductContract.ID)),
+                    getString(getColumnIndex(ProductContract.IS_DEAD)) == "1",
+                    getString(getColumnIndex(ProductContract.NAME)),
+                    getString(getColumnIndex(ProductContract.TAGS)),
+                    getString(getColumnIndex(ProductContract.IS_DISCONTINUED)) == "1",
+                    getString(getColumnIndex(ProductContract.PRICE_IN_CENTS)).toInt(),
+                    getString(getColumnIndex(ProductContract.REGULAR_PRICE_IN_CENTS)).toInt(),
+                    getString(getColumnIndex(ProductContract.LIMITED_TIME_OFFER_SAVINGS_IN_CENTS)).toInt(),
+                    getString(getColumnIndex(ProductContract.LIMITED_TIME_OFFER_ENDS_ON)),
+                    getString(getColumnIndex(ProductContract.BONUS_REWARD_MILES)).toInt(),
+                    getString(getColumnIndex(ProductContract.BONUS_REWARD_MILES_ENDS_ON)),
+                    getString(getColumnIndex(ProductContract.STOCK_TYPE)),
+                    getString(getColumnIndex(ProductContract.PRIMARY_CATEGORY)),
+                    getString(getColumnIndex(ProductContract.SECONDARY_CATEGORY)),
+                    getString(getColumnIndex(ProductContract.ORIGIN)),
+                    getString(getColumnIndex(ProductContract.PACKAGE)),
+                    getString(getColumnIndex(ProductContract.PACKAGE_UNIT_TYPE)),
+                    getString(getColumnIndex(ProductContract.PACKAGE_UNIT_VOLUME_IN_MILLILITERS)).toInt(),
+                    getString(getColumnIndex(ProductContract.TOTAL_PACKAGE_UNITS)).toInt(),
+                    getString(getColumnIndex(ProductContract.VOLUME_IN_MILLILITERS)).toInt(),
+                    getString(getColumnIndex(ProductContract.ALCOHOL_CONTENT)).toInt(),
+                    getString(getColumnIndex(ProductContract.PRICE_PER_LITER_OF_ALCOHOL_IN_CENTS)).toInt(),
+                    getString(getColumnIndex(ProductContract.PRICE_PER_LITER_IN_CENTS)).toInt(),
+                    getString(getColumnIndex(ProductContract.INVENTORY_COUNT)).toInt(),
+                    getString(getColumnIndex(ProductContract.INVENTORY_VOLUME_IN_MILLILITERS)).toInt(),
+                    getString(getColumnIndex(ProductContract.INVENTORY_PRICE_IN_CENTS)).toInt(),
+                    getString(getColumnIndex(ProductContract.SUGAR_CONTENT)),
+                    getString(getColumnIndex(ProductContract.PRODUCER_NAME)),
+                    getString(getColumnIndex(ProductContract.RELEASED_ON)),
+                    getString(getColumnIndex(ProductContract.HAS_VALUE_ADDED_PROMOTION)) == "1",
+                    getString(getColumnIndex(ProductContract.HAS_LIMITED_TIME_OFFER)) == "1",
+                    getString(getColumnIndex(ProductContract.HAS_BONUS_REWARD_MILES)) == "1",
+                    getString(getColumnIndex(ProductContract.IS_SEASONAL)) == "1",
+                    getString(getColumnIndex(ProductContract.IS_VQA)) == "1",
+                    getString(getColumnIndex(ProductContract.IS_OCB)) == "1",
+                    getString(getColumnIndex(ProductContract.IS_KOSHER)) == "1",
+                    getString(getColumnIndex(ProductContract.VALUE_ADDED_PROMOTION_DESCRIPTION)),
+                    getString(getColumnIndex(ProductContract.DESCRIPTION)),
+                    getString(getColumnIndex(ProductContract.SERVING_SUGGESTION)),
+                    getString(getColumnIndex(ProductContract.TASTING_NOTE)),
+                    getString(getColumnIndex(ProductContract.UPDATED_AT)),
+                    getString(getColumnIndex(ProductContract.IMAGE_THUMB_URL)),
+                    getString(getColumnIndex(ProductContract.IMAGE_URL)),
+                    getString(getColumnIndex(ProductContract.VARIETAL)),
+                    getString(getColumnIndex(ProductContract.STYLE)),
+                    getString(getColumnIndex(ProductContract.TERTIARY_CATEGORY)),
+                    getString(getColumnIndex(ProductContract.SUGAR_IN_GRAMS_PER_LITER)).toInt(),
+                    getString(getColumnIndex(ProductContract.CLEARANCE_SALE_SAVINGS_IN_CENTS)).toInt(),
+                    getString(getColumnIndex(ProductContract.HAS_CLEARANCE_SALE)) == "1",
+                    getString(getColumnIndex(ProductContract.PRODUCT_NO)).toLong()
+
+            ))
+        } while (moveToFirst())
+    close()
+    return products
 }

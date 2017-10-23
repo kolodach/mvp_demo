@@ -24,7 +24,7 @@ import com.google.gson.annotations.SerializedName
 data class Store(
         @SerializedName("id")
         @Expose
-		val id: Int,
+		val id: Long,
         @SerializedName("is_dead")
         @Expose
 		val isDead: Boolean,

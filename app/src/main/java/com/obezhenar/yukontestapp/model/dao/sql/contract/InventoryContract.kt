@@ -39,7 +39,7 @@ class InventoryContract {
 
         fun createTable(db: SQLiteDatabase) {
             db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                    ID + " INTEGER PRIMARY KEY," +
+                    ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     PRODUCT_ID + TYPE_TEXT + COMMA_SEP +
                     STORE_ID + TYPE_TEXT + COMMA_SEP +
                     IS_DEAD + TYPE_TEXT + COMMA_SEP +
@@ -55,37 +55,38 @@ class InventoryContract {
 
         }
 
-        fun Inventory.obtainContentValues(): ContentValues {
-            val cv = ContentValues()
-            cv.put(PRODUCT_ID, productId)
-            cv.put(STORE_ID, storeId)
-            cv.put(IS_DEAD, isDead)
-            cv.put(QUANTITY, quantity)
-            cv.put(UPDATED_ON, updatedOn)
-            cv.put(UPDATED_AT, updatedAt)
-            cv.put(PRODUCT_NO, productNo)
-            cv.put(STORE_NO, storeNo)
-            return cv
-        }
-
-        fun Cursor.obtainInventories(): List<Inventory> {
-            val inventories = ArrayList<Inventory>()
-            if (moveToFirst())
-                do {
-                    inventories.add(Inventory(
-                            getString(getColumnIndex(PRODUCT_ID)).toLong(),
-                            getString(getColumnIndex(STORE_ID)).toLong(),
-                            getString(getColumnIndex(IS_DEAD)).toBoolean(),
-                            getString(getColumnIndex(QUANTITY)).toInt(),
-                            getString(getColumnIndex(UPDATED_ON)),
-                            getString(getColumnIndex(UPDATED_AT)),
-                            getString(getColumnIndex(PRODUCT_NO)).toLong(),
-                            getString(getColumnIndex(STORE_NO)).toInt()
-                    ))
-                } while (moveToNext())
-            close()
-            return inventories
-        }
-
     }
+}
+
+fun Inventory.obtainContentValues(): ContentValues {
+    val cv = ContentValues()
+    cv.put(InventoryContract.PRODUCT_ID, productId)
+    cv.put(InventoryContract.STORE_ID, storeId)
+    cv.put(InventoryContract.IS_DEAD, isDead)
+    cv.put(InventoryContract.QUANTITY, quantity)
+    cv.put(InventoryContract.UPDATED_ON, updatedOn)
+    cv.put(InventoryContract.UPDATED_AT, updatedAt)
+    cv.put(InventoryContract.PRODUCT_NO, productNo)
+    cv.put(InventoryContract.STORE_NO, storeNo)
+    return cv
+}
+
+fun Cursor.obtainInventories(): List<Inventory> {
+    val inventories = ArrayList<Inventory>()
+    if (moveToFirst())
+        do {
+            inventories.add(Inventory(
+                    getLong(getColumnIndex(InventoryContract.ID)),
+                    getString(getColumnIndex(InventoryContract.PRODUCT_ID)).toLong(),
+                    getString(getColumnIndex(InventoryContract.STORE_ID)).toLong(),
+                    getString(getColumnIndex(InventoryContract.IS_DEAD)) == "1",
+                    getString(getColumnIndex(InventoryContract.QUANTITY)).toInt(),
+                    getString(getColumnIndex(InventoryContract.UPDATED_ON)),
+                    getString(getColumnIndex(InventoryContract.UPDATED_AT)),
+                    getString(getColumnIndex(InventoryContract.PRODUCT_NO)).toLong(),
+                    getString(getColumnIndex(InventoryContract.STORE_NO)).toInt()
+            ))
+        } while (moveToNext())
+    close()
+    return inventories
 }

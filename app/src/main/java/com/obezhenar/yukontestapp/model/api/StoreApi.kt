@@ -29,7 +29,7 @@ import retrofit2.http.Query
  */
 interface StoreApi {
 
-    @GET("/lcboapi.com/stores")
+    @GET("/stores")
     fun getStoresByPage(
             @Query("page")
             @IntRange(from = 1)

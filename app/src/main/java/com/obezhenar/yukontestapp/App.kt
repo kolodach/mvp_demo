@@ -16,6 +16,7 @@
 package com.obezhenar.yukontestapp
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 
 /**
  * Created by Oleg Bezhenar on 10/18/2017.
@@ -25,6 +26,7 @@ class App : Application() {
     override fun onCreate() {
         instance = this
         super.onCreate()
+        Stetho.initializeWithDefaults(this)
     }
 
     companion object {

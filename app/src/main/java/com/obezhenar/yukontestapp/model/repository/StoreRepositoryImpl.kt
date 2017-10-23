@@ -16,9 +16,11 @@
 package com.obezhenar.yukontestapp.model.repository
 
 import com.obezhenar.yukontestapp.C
+import com.obezhenar.yukontestapp.common.AppSchedulers
 import com.obezhenar.yukontestapp.model.api.StoreApi
 import com.obezhenar.yukontestapp.model.dao.StoreDao
 import com.obezhenar.yukontestapp.model.entity.Store
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -39,6 +41,7 @@ class StoreRepositoryImpl(
                                     .subscribeOn(Schedulers.io())
                                     .flatMap { response ->
                                         storeDao.insertAll(response.result)
+                                                .subscribeOn(AppSchedulers.database)
                                                 .andThen(Observable.just<List<Store>>(response.result))
                                     }
                         else
@@ -56,4 +59,6 @@ class StoreRepositoryImpl(
                 else
                     throw it
             }
+
+    override fun removeAll(): Completable = storeDao.removeAll()
 }

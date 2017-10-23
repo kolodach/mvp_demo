@@ -15,16 +15,20 @@
  */
 package com.obezhenar.yukontestapp.common.di
 
+import com.obezhenar.yukontestapp.model.api.ProductApi
 import com.obezhenar.yukontestapp.model.api.StoreApi
 import com.obezhenar.yukontestapp.model.api.UserApi
+import com.obezhenar.yukontestapp.model.dao.InventoryDao
+import com.obezhenar.yukontestapp.model.dao.ProductDao
 import com.obezhenar.yukontestapp.model.dao.StoreDao
 import com.obezhenar.yukontestapp.model.dao.UserDao
 import com.obezhenar.yukontestapp.model.domain.EmailValidator
 import com.obezhenar.yukontestapp.model.domain.Validator
+import com.obezhenar.yukontestapp.model.intecactor.LogOutInteractor
+import com.obezhenar.yukontestapp.model.intecactor.LogOutInteractorImpl
 import com.obezhenar.yukontestapp.model.repository.*
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -51,10 +55,24 @@ class DomainModule {
 
     @Provides
     @Singleton
-    fun provideProductRepository(): ProductRepository =
-            ProductRepositoryImpl()
+    fun provideProductRepository(
+            productApi: ProductApi,
+            productDao: ProductDao,
+            inventoryDao: InventoryDao
+    ): ProductRepository =
+            ProductRepositoryImpl(
+                    productDao, productApi, inventoryDao)
 
     @Provides
     @Singleton
     fun provideEmailValidator(): Validator<String> = EmailValidator()
+
+    @Provides
+    @Singleton
+    fun provideLogOutInteractor(
+            userRepository: UserRepository,
+            storeRepository: StoreRepository,
+            productRepository: ProductRepository)
+            : LogOutInteractor = LogOutInteractorImpl(
+            userRepository, storeRepository, productRepository)
 }

@@ -16,7 +16,7 @@ android {
 
         resValue 'string', 'account_type', ACCOUNT_TYPE
         resValue 'string', 'account_token_type', ACCOUNT_TOKEN_TYPE
-        buildConfigField 'String', 'API_KEY', ACCOUNT_TYPE
+        buildConfigField 'String', 'API_KEY', API_KEY
     }
     buildTypes {
         release {
@@ -53,8 +53,12 @@ dependencies {
     compile 'com.google.dagger:dagger:2.12'
     kapt 'com.google.dagger:dagger-compiler:2.12'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile 'com.squareup.sqlbrite2:sqlbrite:2.0.0'
-    compile 'com.squareup.sqlbrite2:sqlbrite-kotlin:2.0.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:(insert latest version)'
+    compile('com.github.ihsanbal:LoggingInterceptor:2.0.3') {
+        exclude group: 'org.json', module: 'json'
+    }
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
 repositories {
     mavenCentral()

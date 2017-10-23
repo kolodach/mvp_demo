@@ -19,15 +19,16 @@ import android.support.annotation.IntRange
 import com.obezhenar.yukontestapp.model.entity.Product
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
  * Repository interface. Defines the operations on the Product entities.
  */
 interface ProductRepository {
-    fun getProductsByPage(@IntRange(from = 1) page: Int): Flowable<List<Product>>
+    fun getProductsInstore(storeId: Long, page: Int): Observable<List<Product>>
 
-    fun getProductById(): Single<Product>
+    fun getProductById(id : Long): Single<Product>
 
-    fun syncProducts(): Completable
+    fun removeAll(): Completable
 }

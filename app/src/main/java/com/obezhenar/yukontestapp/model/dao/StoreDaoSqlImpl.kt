@@ -15,10 +15,12 @@
  */
 package com.obezhenar.yukontestapp.model.dao
 
+import android.database.sqlite.SQLiteDatabase
 import com.obezhenar.yukontestapp.C
+import com.obezhenar.yukontestapp.common.extensions.completable
+import com.obezhenar.yukontestapp.common.extensions.observable
 import com.obezhenar.yukontestapp.model.dao.sql.contract.StoreContract
 import com.obezhenar.yukontestapp.model.entity.Store
-import com.squareup.sqlbrite2.BriteDatabase
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -26,23 +28,30 @@ import io.reactivex.Single
 /**
  * Created by 1 on 10/20/2017.
  */
-class StoreDaoSqlImpl (private val database: BriteDatabase) : StoreDao {
+class StoreDaoSqlImpl(private val database: SQLiteDatabase) : StoreDao {
     override fun getStoresByPage(page: Int): Observable<List<Store>> =
-            database.createQuery(StoreContract.TABLE_NAME,
-                    "SELECT * FROM ${StoreContract.TABLE_NAME} LIMIT ${C.RECORDS_PER_PAGE * (page - 1)} " +
-                            "OFFSET ${C.RECORDS_PER_PAGE};", null
-            ).map { StoreContract.obtainStores(it.run()!!) }
+            observable {
+                database.rawQuery("SELECT * FROM ${StoreContract.TABLE_NAME} LIMIT ${C.RECORDS_PER_PAGE} " +
+                        "OFFSET ${C.RECORDS_PER_PAGE * (page - 1)};", null)
+            }
+                    .map { StoreContract.obtainStores(it) }
+                    .doOnError { it.printStackTrace() }
+                    .onErrorResumeNext(observable { emptyList<Store>() })
 
     override fun getStoreById(id: Long): Single<Store> =
-            database.createQuery(StoreContract.TABLE_NAME,
-                    "SELECT * FROM WHERE " + StoreContract.ID + "=?",
-                    StoreContract.TABLE_NAME,
-                    id.toString()
-            ).map { StoreContract.obtainStores(it.run()!!)[0] }
+            observable {
+                database.rawQuery("SELECT * FROM ${StoreContract.TABLE_NAME} WHERE " +
+                        "${StoreContract.ID}=$id;", null)
+            }.map { StoreContract.obtainStores(it)[0] }
                     .singleOrError()
 
-    override fun insertAll(stores: List<Store>) = Completable.fromAction {
+    override fun insertAll(stores: List<Store>) = completable {
         stores.map { StoreContract.obtainContentValues(it) }
-                .forEach { database.insert(StoreContract.TABLE_NAME, it) }
+                .forEach { database.insert(StoreContract.TABLE_NAME, null, it) }
+    }
+
+    override fun removeAll(): Completable = completable {
+        database.execSQL("DROP TABLE ${StoreContract.TABLE_NAME};")
+        StoreContract.createTable(database)
     }
 }

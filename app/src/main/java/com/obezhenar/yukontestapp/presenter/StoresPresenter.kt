@@ -20,6 +20,7 @@ import com.obezhenar.yukontestapp.common.AppSchedulers
 import com.obezhenar.yukontestapp.common.RxMvpPresenter
 import com.obezhenar.yukontestapp.common.di.AppInjector
 import com.obezhenar.yukontestapp.common.extensions.observeOnMainThread
+import com.obezhenar.yukontestapp.model.repository.ProductRepository
 import com.obezhenar.yukontestapp.model.repository.StoreRepository
 import com.obezhenar.yukontestapp.view.StoresView
 import javax.inject.Inject
@@ -31,6 +32,8 @@ import javax.inject.Inject
 class StoresPresenter : RxMvpPresenter<StoresView>() {
     @Inject
     lateinit var storeRepository: StoreRepository
+    @Inject
+    lateinit var productRepository: ProductRepository
 
     private var currentPage = 1
 
@@ -38,14 +41,29 @@ class StoresPresenter : RxMvpPresenter<StoresView>() {
         AppInjector.inject(this)
     }
 
-    fun loadMoreStore() {
+    fun refreshStores() {
+        addDisposable(storeRepository.removeAll()
+                .andThen(productRepository.removeAll())
+                .subscribeOn(AppSchedulers.database)
+                .observeOnMainThread()
+                .subscribe({
+                    viewState.onStoresCleared()
+                }, {
+                    it.printStackTrace()
+                }))
+    }
+
+    fun loadMoreStores() {
         viewState.displayProgress(true)
         addDisposable(storeRepository.getStoresByPage(currentPage)
                 .subscribeOn(AppSchedulers.single)
                 .observeOnMainThread()
                 .subscribe({
                     viewState.displayProgress(false)
-                    viewState.addStores(it)
+                    if (it.isNotEmpty())
+                        viewState.addStores(it)
+                    else
+                        viewState.onAllItemsLoaded()
                     currentPage++
                 }, {
                     it.printStackTrace()

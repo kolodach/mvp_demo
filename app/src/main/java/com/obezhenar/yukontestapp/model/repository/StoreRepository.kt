@@ -17,7 +17,7 @@ package com.obezhenar.yukontestapp.model.repository
 
 import android.support.annotation.IntRange
 import com.obezhenar.yukontestapp.model.entity.Store
-import com.squareup.sqlbrite2.BriteDatabase
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -28,4 +28,6 @@ interface StoreRepository {
     fun getStoresByPage(@IntRange(from = 1) page: Int): Observable<List<Store>>
 
     fun getStoreById(id: Long): Single<Store>
+
+    fun removeAll(): Completable
 }

@@ -19,17 +19,11 @@
 package com.obezhenar.yukontestapp.common.di
 
 import android.content.Context
-import com.obezhenar.yukontestapp.common.AppSchedulers
-import com.obezhenar.yukontestapp.model.dao.StoreDao
-import com.obezhenar.yukontestapp.model.dao.StoreDaoSqlImpl
-import com.obezhenar.yukontestapp.model.dao.UserDao
-import com.obezhenar.yukontestapp.model.dao.UserDaoAuthenticatorImpl
+import android.database.sqlite.SQLiteDatabase
+import com.obezhenar.yukontestapp.model.dao.*
 import com.obezhenar.yukontestapp.model.dao.sql.AppDbHelper
-import com.squareup.sqlbrite2.BriteDatabase
-import com.squareup.sqlbrite2.SqlBrite
 import dagger.Module
 import dagger.Provides
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Singleton
 
 /**
@@ -43,13 +37,20 @@ class DaoModule {
 
     @Provides
     @Singleton
-    fun provideStoreDao(database: BriteDatabase): StoreDao = StoreDaoSqlImpl(database)
+    fun provideStoreDao(database: SQLiteDatabase): StoreDao = StoreDaoSqlImpl(database)
 
     @Provides
     @Singleton
-    fun provideDatabase(context: Context): BriteDatabase {
+    fun provideProductDa(database: SQLiteDatabase): ProductDao = ProductDaoSqlImpl(database)
+
+    @Provides
+    @Singleton
+    fun provideInventoryDao(database: SQLiteDatabase): InventoryDao = InventoryDaoSqlImpl(database)
+
+    @Provides
+    @Singleton
+    fun provideDatabase(context: Context): SQLiteDatabase {
         val dbHelper = AppDbHelper(context)
-        val sqlBrite = SqlBrite.Builder().build()
-        return sqlBrite.wrapDatabaseHelper(dbHelper, AppSchedulers.database)
+        return dbHelper.writableDatabase
     }
 }

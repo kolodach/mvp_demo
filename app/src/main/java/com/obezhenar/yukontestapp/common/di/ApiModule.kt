@@ -16,7 +16,10 @@
 package com.obezhenar.yukontestapp.common.di
 
 import android.content.Context
+import com.ihsanbal.logging.Level
+import com.ihsanbal.logging.LoggingInterceptor
 import com.obezhenar.yukontestapp.BuildConfig
+import com.obezhenar.yukontestapp.model.api.ProductApi
 import com.obezhenar.yukontestapp.model.api.StoreApi
 import com.obezhenar.yukontestapp.model.api.UserApi
 import com.obezhenar.yukontestapp.model.api.UserApiMockImpl
@@ -25,6 +28,7 @@ import dagger.Provides
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.internal.platform.Platform
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -46,6 +50,10 @@ class ApiModule {
 
     @Provides
     @Singleton
+    fun provideProductsApi(retrofit: Retrofit): ProductApi = retrofit.create(ProductApi::class.java)
+
+    @Provides
+    @Singleton
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -56,6 +64,13 @@ class ApiModule {
                                 .addHeader("Authorization", "Token ${BuildConfig.API_KEY}")
                                 .build())
                     }
+                    .addInterceptor(LoggingInterceptor.Builder()
+                            .loggable(BuildConfig.DEBUG)
+                            .setLevel(Level.BASIC)
+                            .log(Platform.INFO)
+                            .request("Request")
+                            .response("Response")
+                            .build())
                     .build())
             .build()
 }

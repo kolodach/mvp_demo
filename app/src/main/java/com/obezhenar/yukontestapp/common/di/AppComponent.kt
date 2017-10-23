@@ -15,10 +15,7 @@
  */
 package com.obezhenar.yukontestapp.common.di
 
-import com.obezhenar.yukontestapp.presenter.LogInPresenter
-import com.obezhenar.yukontestapp.presenter.RegistrationPresenter
-import com.obezhenar.yukontestapp.presenter.SplashScreenPresenter
-import com.obezhenar.yukontestapp.presenter.StoresPresenter
+import com.obezhenar.yukontestapp.presenter.*
 import com.obezhenar.yukontestapp.system.AppAuthenticator
 import dagger.Component
 import javax.inject.Singleton
@@ -38,5 +35,8 @@ interface AppComponent {
     fun inject(presenter: SplashScreenPresenter)
     fun inject(presenter: RegistrationPresenter)
     fun inject(presenter: StoresPresenter)
+    fun inject(presenter: LogOutPresenter)
+    fun inject(presenter: StoreDetailsPresenter)
+    fun inject(presenter: ProductsPresenter)
     fun inject(authenticator: AppAuthenticator)
 }

@@ -141,7 +141,7 @@ class AppAuthenticator(private val context: Context)
 
         fun getAccount(context: Context): Account? {
             val am = AccountManager.get(context)
-            if (am.accounts.size == 0)
+            if (am.accounts.isEmpty())
                 return null
             return am.accounts[0]
         }

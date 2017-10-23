@@ -25,4 +25,8 @@ interface StoresView : MvpView {
     fun displayProgress(display: Boolean)
 
     fun addStores(stores: List<Store>)
+
+    fun onAllItemsLoaded()
+
+    fun onStoresCleared()
 }
