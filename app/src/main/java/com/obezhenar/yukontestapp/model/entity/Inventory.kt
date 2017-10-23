@@ -22,7 +22,6 @@ import com.google.gson.annotations.SerializedName
  * Created by 1 on 10/19/2017.
  */
 data class Inventory(
-        val id : Long,
         @SerializedName("product_id")
         @Expose
         var productId: Long,

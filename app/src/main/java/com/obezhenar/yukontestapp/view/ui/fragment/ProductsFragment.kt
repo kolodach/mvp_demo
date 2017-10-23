@@ -3,12 +3,12 @@ package com.obezhenar.yukontestapp.view.ui.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.obezhenar.yukontestapp.R
 import com.obezhenar.yukontestapp.model.entity.Product
 import com.obezhenar.yukontestapp.presenter.ProductsPresenter
@@ -24,6 +24,7 @@ class ProductsFragment : MvpAppCompatFragment(), ProductsView {
     lateinit var presenter: ProductsPresenter
     var storeId = 0L
     var adapter = ProductsAdapter()
+    var loading = false
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_products, container, false)
@@ -44,15 +45,26 @@ class ProductsFragment : MvpAppCompatFragment(), ProductsView {
         rvProducts.layoutManager = layoutManager
         rvProducts.adapter = adapter
 
-        presenter.loadMoreStores(storeId)
+        rvProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                if (layoutManager.findLastVisibleItemPosition() >= adapter.itemCount - 10
+                        && !loading)
+                    presenter.loadMoreProducts(storeId)
+            }
+        })
+
+        presenter.loadMoreProducts(storeId)
     }
 
     override fun displayProgress(display: Boolean) {
-        adapter.isLoading = true
+        adapter.isLoading = display
+        loading = display
     }
 
     override fun onAllLoaded() {
-
+        adapter.isLoading = false
+        loading = false
+        adapter.notifyItemChanged(adapter.itemCount - 1)
     }
 
     override fun displayProducts(products: List<Product>) {

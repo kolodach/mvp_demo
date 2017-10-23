@@ -50,7 +50,7 @@ class ProductRepositoryImpl(
                                         .subscribeOn(AppSchedulers.database)
                                         .andThen(inventoryDao.insertAll(products.result.map {
                                             Inventory(
-                                                    0, it.id, storeId, false, 0, ", ", "", 0L, 0)
+                                                    it.id, storeId, false, 0, ", ", "", 0L, 0)
                                         }))
                                         .andThen(observable { products.result })
                             }

@@ -40,11 +40,11 @@ data class Product(
         @SerializedName("limited_time_offer_ends_on")
         var limitedTimeOfferEndsOn: String?,
         @SerializedName("bonus_reward_miles")
-        var bonusRewardMiles: Int,
+        var bonusRewardMiles: Int?,
         @SerializedName("bonus_reward_miles_ends_on")
-        var bonusRewardMilesEndsOn: String,
+        var bonusRewardMilesEndsOn: String?,
         @SerializedName("stock_type")
-        var stockType: String,
+        var stockType: String?,
         @SerializedName("primary_category")
         var primaryCategory: String,
         @SerializedName("secondary_category")
@@ -74,7 +74,7 @@ data class Product(
         @SerializedName("inventory_price_in_cents")
         var inventoryPriceInCents: Int,
         @SerializedName("sugar_content")
-        var sugarContent: String,
+        var sugarContent: String?,
         @SerializedName("producer_name")
         var producerName: String,
         @SerializedName("released_on")
@@ -104,15 +104,15 @@ data class Product(
         @SerializedName("updated_at")
         var updatedAt: String?,
         @SerializedName("image_thumb_url")
-        var imageThumbUrl: String,
+        var imageThumbUrl: String?,
         @SerializedName("image_url")
-        var imageUrl: String,
+        var imageUrl: String?,
         @SerializedName("varietal")
-        var varietal: String,
+        var varietal: String?,
         @SerializedName("style")
-        var style: String,
+        var style: String?,
         @SerializedName("tertiary_category")
-        var tertiaryCategory: String,
+        var tertiaryCategory: String?,
         @SerializedName("sugar_in_grams_per_liter")
         var sugarInGramsPerLiter: Int?,
         @SerializedName("clearance_sale_savings_in_cents")

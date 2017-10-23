@@ -23,12 +23,13 @@ class ProductsPresenter : RxMvpPresenter<ProductsView>() {
         AppInjector.inject(this)
     }
 
-    fun loadMoreStores(storeId: Long) {
+    fun loadMoreProducts(storeId: Long) {
         viewState.displayProgress(true)
         addDisposable(productsRepository.getProductsInstore(storeId, currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOnMainThread()
                 .subscribe({
+                    currentPage++
                     viewState.displayProgress(false)
                     if (it.isEmpty())
                         viewState.onAllLoaded()
@@ -46,7 +47,7 @@ class ProductsPresenter : RxMvpPresenter<ProductsView>() {
                 .observeOnMainThread()
                 .subscribe({
                     currentPage = 1
-                    loadMoreStores(storeId)
+                    loadMoreProducts(storeId)
                 }, {
                     it.printStackTrace()
                 }))

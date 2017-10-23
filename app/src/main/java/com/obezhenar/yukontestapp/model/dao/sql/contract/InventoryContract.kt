@@ -39,7 +39,6 @@ class InventoryContract {
 
         fun createTable(db: SQLiteDatabase) {
             db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                    ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     PRODUCT_ID + TYPE_TEXT + COMMA_SEP +
                     STORE_ID + TYPE_TEXT + COMMA_SEP +
                     IS_DEAD + TYPE_TEXT + COMMA_SEP +
@@ -76,7 +75,6 @@ fun Cursor.obtainInventories(): List<Inventory> {
     if (moveToFirst())
         do {
             inventories.add(Inventory(
-                    getLong(getColumnIndex(InventoryContract.ID)),
                     getString(getColumnIndex(InventoryContract.PRODUCT_ID)).toLong(),
                     getString(getColumnIndex(InventoryContract.STORE_ID)).toLong(),
                     getString(getColumnIndex(InventoryContract.IS_DEAD)) == "1",
