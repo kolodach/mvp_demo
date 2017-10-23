@@ -19,9 +19,11 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.obezhenar.yukontestapp.R
+import com.obezhenar.yukontestapp.common.extensions.isNetworkAvailable
 import com.obezhenar.yukontestapp.model.entity.Store
 import com.obezhenar.yukontestapp.presenter.StoresPresenter
 import com.obezhenar.yukontestapp.view.StoresView
@@ -65,8 +67,12 @@ class StoresFragment : MvpAppCompatFragment(), StoresView {
             }
         })
         swipeRefresh.setOnRefreshListener {
-            storesPresenter.refreshStores()
-            adapter.clean()
+            if (activity.isNetworkAvailable()) {
+                storesPresenter.refreshStores()
+                adapter.clean()
+            } else {
+                Toast.makeText(context, "Network unavailable", Toast.LENGTH_SHORT).show()
+            }
         }
 
         storesPresenter.loadMoreStores()

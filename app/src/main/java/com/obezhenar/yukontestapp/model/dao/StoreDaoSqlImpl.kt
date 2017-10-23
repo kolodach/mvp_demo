@@ -42,7 +42,11 @@ class StoreDaoSqlImpl(private val database: SQLiteDatabase) : StoreDao {
             observable {
                 database.rawQuery("SELECT * FROM ${StoreContract.TABLE_NAME} WHERE " +
                         "${StoreContract.ID}=$id;", null)
-            }.map { StoreContract.obtainStores(it)[0] }
+            }.map {
+                val stores = StoreContract.obtainStores(it)
+                if(stores.isEmpty())
+                    throw NoSuchElementException()
+                stores[0] }
                     .singleOrError()
 
     override fun insertAll(stores: List<Store>) = completable {

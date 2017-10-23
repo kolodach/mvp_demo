@@ -10,7 +10,8 @@
         android:id="@+id/edName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/name"/>
+        android:hint="@string/name"
+        android:inputType="textPersonName"/>
 
     <EditText
         android:id="@+id/edEmail"
@@ -35,15 +36,15 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
     <Button
-        android:enabled="false"
         android:id="@+id/btnCreateAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="@string/create_account"/>
 
     <TextView

@@ -48,13 +48,14 @@ class SplashScreenPresenter : RxMvpPresenter<SplashScreenView>() {
 
     fun performSync() {
         addDisposable(userRepository.refreshToken()
-                .delay(1, TimeUnit.SECONDS)
+                .delay(400, TimeUnit.MILLISECONDS)
                 .andThen(storesRepository.getStoresByPage(1).ignoreElements())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ viewState.displayMainScreen() }, {
                     if ((it is HttpException && it.code() == 401)
-                            || (it is IllegalArgumentException))
+                            || (it is IllegalArgumentException)
+                            || (it is SecurityException))
                         viewState.displayLogInScreen()
                     else
                         viewState.displayMainScreen()

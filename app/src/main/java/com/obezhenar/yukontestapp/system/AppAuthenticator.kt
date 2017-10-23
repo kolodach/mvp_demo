@@ -40,10 +40,6 @@ import javax.inject.Inject
 class AppAuthenticator(private val context: Context)
     : AbstractAccountAuthenticator(context) {
 
-    private val accountType = context.getString(R.string.account_type)
-    private val accountTokenType = context.getString(R.string.account_token_type)
-
-
     @Inject
     lateinit var userApi: UserApi
 
@@ -55,7 +51,7 @@ class AppAuthenticator(private val context: Context)
         val result = Bundle()
         val intent = Intent(context, AuthenticationActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, ACCOUNT_TYPE)
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account?.name)
         result.putParcelable(AccountManager.KEY_INTENT, intent)
         return result
@@ -64,7 +60,7 @@ class AppAuthenticator(private val context: Context)
     override fun getAuthToken(response: AccountAuthenticatorResponse?, account: Account?, authTokenType: String?, options: Bundle?): Bundle? {
         val am = AccountManager.get(context)
 
-        var authToken = am.peekAuthToken(account, authTokenType)
+        var authToken = am.peekAuthToken(account, ACCOUNT_TYPE)
 
         //attempt to refresh the token
         if (TextUtils.isEmpty(authToken)) {
@@ -95,15 +91,15 @@ class AppAuthenticator(private val context: Context)
         if (!TextUtils.isEmpty(authToken)) {
             val result = Bundle()
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account?.name)
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, ACCOUNT_TYPE)
             result.putString(AccountManager.KEY_AUTHTOKEN, authToken)
             return result
         }
 
         val intent = Intent(context, AuthenticationActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
-        intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, account?.type)
-        intent.putExtra(AuthenticationActivity.ARG_AUTH_TYPE, authTokenType)
+        intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, ACCOUNT_TYPE)
+        intent.putExtra(AuthenticationActivity.ARG_AUTH_TYPE, ACCOUNT_TOKEN_TYPE)
         val bundle = Bundle()
         bundle.putParcelable(AccountManager.KEY_INTENT, intent)
         return bundle
@@ -121,8 +117,8 @@ class AppAuthenticator(private val context: Context)
 
     override fun addAccount(response: AccountAuthenticatorResponse?, accountType: String?, authTokenType: String?, requiredFeatures: Array<out String>?, options: Bundle?): Bundle {
         val intent = Intent(context, AuthenticationActivity::class.java)
-        intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, accountType)
-        intent.putExtra(AuthenticationActivity.ARG_AUTH_TYPE, accountType)
+        intent.putExtra(AuthenticationActivity.ARG_ACCOUNT_TYPE, ACCOUNT_TYPE)
+        intent.putExtra(AuthenticationActivity.ARG_AUTH_TYPE, ACCOUNT_TOKEN_TYPE)
         intent.putExtra(AuthenticationActivity.ARG_IS_ADDING_NEW_ACCOUNT, true)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         val bundle = Bundle()
@@ -134,16 +130,14 @@ class AppAuthenticator(private val context: Context)
         private val KEY_NAME = "username"
         private val KEY_EMAIL = "email"
         private val KEY_REFRESH_TOKEN = "refresh_token"
-
-        private fun getAuthTokenType(context: Context) = context.getString(R.string.account_token_type)
-
-        private fun getAccountType(context: Context) = context.getString(R.string.account_type)
+        val ACCOUNT_TYPE = "com.obezhenar.lcbotest.account"
+        val ACCOUNT_TOKEN_TYPE = "com.obezhenar.lcbotest.token"
 
         fun getAccount(context: Context): Account? {
             val am = AccountManager.get(context)
             if (am.accounts.isEmpty())
                 return null
-            return am.accounts[0]
+            return am.accounts[am.accounts.size - 1]
         }
 
         fun updateUserData(context: Context, account: Account, user: User) {
@@ -155,7 +149,7 @@ class AppAuthenticator(private val context: Context)
         fun updateToken(context: Context, token: Token) {
             val am = AccountManager.get(context)
             val account = getAccount(context)
-            am.setAuthToken(account, getAuthTokenType(context), token.accessToken)
+            am.setAuthToken(account, ACCOUNT_TOKEN_TYPE, token.accessToken)
             am.setUserData(account, KEY_REFRESH_TOKEN, token.refreshToken)
         }
 
@@ -180,17 +174,17 @@ class AppAuthenticator(private val context: Context)
         fun getToken(context: Context): Token {
             val am = AccountManager.get(context)
             return Token(
-                    am.peekAuthToken(getAccount(context), context.getString(R.string.account_token_type)),
+                    am.peekAuthToken(getAccount(context), ACCOUNT_TOKEN_TYPE),
                     am.getUserData(getAccount(context), KEY_REFRESH_TOKEN)
             )
         }
 
         fun addAccount(context: Context, user: User, token: Token) {
             val am = AccountManager.get(context)
-            val account = Account(user.email, context.getString(R.string.account_type))
+            val account = Account(user.email, ACCOUNT_TYPE)
             am.addAccountExplicitly(account, user.password,
                     AppAuthenticator.getUserData(user, token.refreshToken))
-            am.setAuthToken(account, context.getString(R.string.account_token_type), token.accessToken)
+            am.setAuthToken(account, ACCOUNT_TOKEN_TYPE, token.accessToken)
         }
     }
 }
