@@ -14,7 +14,7 @@ when a device is offline.
 
 ## API
 As I noticed, the app uses the LCBO API as a remote data source. App uses [Retrofit2](http://square.github.io/retrofit/) as a networking library
-and [OkHttp](http://square.github.io/okhttp/) as an HTTP client.
+and [OkHttp](http://square.github.io/okhttp/) as the HTTP client.
 
 ## Persistence
 The application uses SQL database to store all data locally. There are 3 main tables in DB schema:
