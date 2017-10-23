@@ -18,7 +18,7 @@ package com.obezhenar.yukontestapp.presenter
 import com.arellomobile.mvp.InjectViewState
 import com.obezhenar.yukontestapp.common.RxMvpPresenter
 import com.obezhenar.yukontestapp.common.di.AppInjector
-import com.obezhenar.yukontestapp.model.domain.Validator
+import com.obezhenar.yukontestapp.model.validator.Validator
 import com.obezhenar.yukontestapp.model.repository.UserRepository
 import com.obezhenar.yukontestapp.view.LogInView
 import io.reactivex.android.schedulers.AndroidSchedulers

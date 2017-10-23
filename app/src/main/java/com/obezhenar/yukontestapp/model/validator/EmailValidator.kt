@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obezhenar.yukontestapp.model.domain
+package com.obezhenar.yukontestapp.model.validator
 
 /**
  * This class validate email field

@@ -27,10 +27,6 @@ import com.obezhenar.yukontestapp.common.extensions.typeOf
  *  to analyze component methods. Also, this application uses a convention of component's
  *  injection method naming. The injection method should be named "inject", otherwise
  *  it won't be invoked.
- *
- *  PS: About reflection. This is a hot topic for the most of Java developers.
- *  And yes I know that the reflection is slower than just regular method call and I do not
- *  use it in my production projects.
  */
 class AppInjector {
     companion object {
@@ -44,7 +40,7 @@ class AppInjector {
         }
 
         /**
-         * This method resolves the incoming injection looking for the "inject" method
+         * This method resolves incoming injection looking for the "inject" method
          * with appropriate param type using reflection and invokes it. If method doesn't
          * found then it throws an IllegalArgumentException
          *

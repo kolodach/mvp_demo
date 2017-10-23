@@ -22,8 +22,8 @@ import com.obezhenar.yukontestapp.model.dao.InventoryDao
 import com.obezhenar.yukontestapp.model.dao.ProductDao
 import com.obezhenar.yukontestapp.model.dao.StoreDao
 import com.obezhenar.yukontestapp.model.dao.UserDao
-import com.obezhenar.yukontestapp.model.domain.EmailValidator
-import com.obezhenar.yukontestapp.model.domain.Validator
+import com.obezhenar.yukontestapp.model.validator.EmailValidator
+import com.obezhenar.yukontestapp.model.validator.Validator
 import com.obezhenar.yukontestapp.model.intecactor.LogOutInteractor
 import com.obezhenar.yukontestapp.model.intecactor.LogOutInteractorImpl
 import com.obezhenar.yukontestapp.model.repository.*
