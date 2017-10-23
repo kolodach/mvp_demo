@@ -16,7 +16,7 @@
 package com.obezhenar.yukontestapp
 
 /**
- * Put you global constants here
+ * Put your global constants here
  */
 class C {
     companion object {
