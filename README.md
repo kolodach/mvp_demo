@@ -19,5 +19,5 @@ and [OkHttp](http://square.github.io/okhttp/) as an HTTP client.
 ## Persistence
 The application uses SQL database to store all data locally. There are 3 main tables in DB schema:
 * Store - represents store object.
-* Product - Represents products in a Store.
-* Inventory - A helper table that describes the availability of a Product in a specific Store.
+* Product - represents products in a Store.
+* Inventory - a helper table that describes the availability of a Product in a specific Store.
